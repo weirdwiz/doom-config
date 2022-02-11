@@ -6,11 +6,6 @@
 
 (setq-default shell-file-name "/usr/bin/zsh")
 
-
-(add-to-list 'default-frame-alist '(height . 24))
-(add-to-list 'default-frame-alist '(width . 80))
-
-
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
 (setq user-full-name "Divyansh Kamboj"
@@ -28,8 +23,8 @@
 ;; font string. You generally only need these two:
 
 
-(setq doom-font (font-spec :family "FantasqueSansMono Nerd Font" :size 18)
-      doom-big-font (font-spec :family "FantasqueSansMono Nerd Font" :size 36)
+(setq doom-font (font-spec :family "InputMono" :size 14 :weight 'light)
+      doom-big-font (font-spec :family "InputMono" :size 36)
       doom-variable-pitch-font (font-spec :family "SF Pro" :size 17)
       doom-unicode-font (font-spec :family "JuliaMono")
       doom-serif-font (font-spec :family "IBM Plex Mono" :weight 'light))
@@ -39,7 +34,19 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-xcode)
+(setq doom-theme 'doom-gruvbox)
+
+(setq +latex-viewers '(okular))
+
+(setq gc-cons-threshold 400000000)
+
+(setq lsp-clients-clangd-args '("-j=3"
+                                "--background-index"
+                                "--clang-tidy"
+                                "--completion-style=detailed"
+                                "--header-insertion=never"
+                                "--header-insertion-decorators=0"))
+(after! lsp-clangd (set-lsp-priority! 'clangd 2))
 
 (setq doom-fallback-buffer-name "► Doom"
       +doom-dashboard-name "► Doom")
@@ -139,16 +146,6 @@
 
 (setq projectile-project-search-path '("~/git/" ))
 
-(setq pgtk-wait-for-event-timeout 0.0001)
-
-(use-package! wakatime-mode
-  :init
-  (global-wakatime-mode)
-  :config
-  (cond (IS-LINUX (setq wakatime-cli-path "/usr/local/bin/wakatime"))
-        (IS-MAC (setq wakatime-cli-path "/run/current-system/sw/bin/wakatime")) ;; We assume nix-darwin
-        )
-  )
 
 (after! org
   (use-package! org-ol-tree
@@ -637,7 +634,6 @@ is selected, only the bare key is returned."
   :priority_c    "[#C]"
   :priority_d    "[#D]"
   :priority_e    "[#E]")
-(plist-put +ligatures-extra-symbols :name "⁍")
 
 (setq org-fontify-quote-and-verse-blocks t)
 
@@ -758,6 +754,7 @@ is selected, only the bare key is returned."
 ;;         org-roam-server-network-label-truncate-length 60
 ;;         org-roam-server-network-label-wrap-length 20))
 
+(setq todoist-token "933ee28ec617e29cf033a646140edfc3b4c55dc2")
 
 (defvar mixed-pitch-modes '(org-mode LaTeX-mode markdown-mode gfm-mode Info-mode)
   "Modes that `mixed-pitch-mode' should be enabled in, but only after UI initialisation.")
@@ -770,5 +767,15 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
     (add-hook (intern (concat (symbol-name hook) "-hook")) #'mixed-pitch-mode)))
 (add-hook 'doom-init-ui-hook #'init-mixed-pitch-h)
 
+(after! lsp-ui
+  (setq lsp-ui-doc-enable t))
 (require 'org-roam-protocol)
 
+(use-package! wakatime-mode
+  :init
+  (global-wakatime-mode)
+  :config
+  (cond (IS-LINUX (setq wakatime-cli-path "/usr/local/bin/wakatime"))
+        (IS-MAC (setq wakatime-cli-path "/run/current-system/sw/bin/wakatime")) ;; We assume nix-darwin
+        )
+  )

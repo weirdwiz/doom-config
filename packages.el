@@ -59,3 +59,9 @@
   :recipe (:host github :repo "progfolio/doct"))
 (package! org-ol-tree :recipe (:host github :repo "Townk/org-ol-tree"))
 (package! evil-escape :disable t)
+(package! modus-themes)
+(package! plz
+  :recipe (:host github :repo "alphapapa/plz.el"))
+(package! ement.el
+  :recipe (:host github :repo "alphapapa/ement.el"))
+(package! todoist)
