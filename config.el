@@ -23,33 +23,38 @@
 ;; font string. You generally only need these two:
 
 
-(setq doom-font (font-spec :family "InputMono" :size 14 :weight 'light)
-      doom-big-font (font-spec :family "InputMono" :size 36)
-      doom-variable-pitch-font (font-spec :family "SF Pro" :size 17)
-      doom-unicode-font (font-spec :family "JuliaMono")
-      doom-serif-font (font-spec :family "IBM Plex Mono" :weight 'light))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 13)
+      doom-big-font (font-spec :family "JetBrains Mono" :size 36)
+      doom-variable-pitch-font (font-spec :family "SF Pro Text" :size 17)
+      doom-unicode-font (font-spec :family "JetBrains Mono")
+      doom-serif-font (font-spec :family "DejaVu Serif" ))
 
 
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'doom-opera)
 
 (setq +latex-viewers '(okular))
 
 (setq gc-cons-threshold 400000000)
 
-(setq lsp-clients-clangd-args '("-j=3"
-                                "--background-index"
-                                "--clang-tidy"
-                                "--completion-style=detailed"
-                                "--header-insertion=never"
-                                "--header-insertion-decorators=0"))
-(after! lsp-clangd (set-lsp-priority! 'clangd 2))
+;; (setq lsp-clients-clangd-args '("-j=3"
+;;                                 "--background-index"
+;;                                 "--clang-tidy"
+;;                                 "--completion-style=detailed"
+;;                                 "--header-insertion=never"
+;;                                 "--header-insertion-decorators=0"))
+;; (after! lsp-clangd (set-lsp-priority! 'clangd 2))
+(after! ccls
+  (setq ccls-initialization-options '(:index (:comments 2) :completion (:detailedLabel t)))
+  (set-lsp-priority! 'ccls 2)) ; optional as ccls is the default in Doom
+
 
 (setq doom-fallback-buffer-name "► Doom"
       +doom-dashboard-name "► Doom")
+;; (setq frame-background-mode 'dark)
 
 (defun lsp-go-install-save-hooks ()
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
@@ -678,7 +683,7 @@ is selected, only the bare key is returned."
     "A variable-pitch face with serifs."
     :group 'basic-faces)
   (setq mixed-pitch-set-height t)
-  (setq variable-pitch-serif-font (font-spec :family "Alegreya" :size 20))
+  (setq variable-pitch-serif-font (font-spec :family "STIX" :size 20))
   (set-face-attribute 'variable-pitch-serif nil :font variable-pitch-serif-font)
   (defun mixed-pitch-serif-mode (&optional arg)
     "Change the default face of the current buffer to a serifed variable pitch, while keeping some faces fixed pitch."
@@ -767,9 +772,11 @@ Also immediately enables `mixed-pitch-modes' if currently in one of the modes."
     (add-hook (intern (concat (symbol-name hook) "-hook")) #'mixed-pitch-mode)))
 (add-hook 'doom-init-ui-hook #'init-mixed-pitch-h)
 
-(after! lsp-ui
-  (setq lsp-ui-doc-enable t))
 (require 'org-roam-protocol)
+
+;; (after! projectile
+;;   (setq projectile-project-root-files-bottom-up
+;;         (remove ".git" projectile-project-root-files-bottom-up)))
 
 (use-package! wakatime-mode
   :init

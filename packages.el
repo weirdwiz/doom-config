@@ -65,3 +65,4 @@
 (package! ement.el
   :recipe (:host github :repo "alphapapa/ement.el"))
 (package! todoist)
+(package! emacs-color-theme-solarized :recipe (:host github :repo "sellout/emacs-color-theme-solarized"))
